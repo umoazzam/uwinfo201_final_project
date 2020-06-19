@@ -1,0 +1,67 @@
+---
+title: "Midpoint Deliverable"
+author: "Gabrielle Isaguirre, Heather Lin, Snow Wu, Usman Moazzam"
+output: html_document
+---
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE, include=FALSE}
+source("scripts/age_and_gender.R")
+source("scripts/aggregate_table.R")
+source("scripts/area_encode_race.R")
+source("scripts/summary_information.R")
+source("scripts/crime_tree.R")
+library("knitr")
+library("treemap")
+```
+
+# Juvenile Crime In The United States
+
+## Introduction
+No news network or media outlet is unbiased— it is inveitable that the team putting together a story is influenced by the company, their peers, and their own opinions. This can be seen in the way that criminals and victims are portrayed, expecially in instances of violent crime. Media is more likely to offer an excuse for a white shooter, such as childhood trauma or a mental health issue, while offering no motive or explination for criminals of color. Sadly, this may even be seen in instances of juvenile crime, or crime commited by a person under the age of 18. By analyzing raw data from juvenile crime arrests, the true nature of juvenile crime in America on the basis of demographics will be revealed; including societal biases and discrimination among gender, age, racial and ethnic diasporas. The relationship between crime types and demographic characteristics will be explored, in reference to the Juvenile Crime dataset that collected pertinent arrest information of juvenile crime United States from 1994 to 2016, gathered and published by the [Federal Bureau of Investigation and the University of California, Riverside](https://crime-data-explorer.fr.cloud.gov/downloads-and-docs). The data includes only **arrests** of minors for crimes, excluding arrests made for the juvenile's safety or well-being, or any other encounters with officials, regardless of reason. 
+
+## Overview of Juvenile Arrests by Demographics
+```{r, echo = FALSE, warning=FALSE, message=FALSE, include=FALSE}
+info <- get_summary_info(juvenile_crime)
+```
+
+#### Gender
+Between the years 1994 and 2016, `r sum(info$all_males + info$all_females)` juveniles were arrested, and was composed of `r info$all_males` boys and `r info$all_females` girls, alluding to the fact that youth males are arrested `r round(info$all_males / info$all_females, 2)` times for every time a youth female is arrested. 
+
+#### Age
+The seventeen year old age category had the highest number of arrests, with a total of `r info$most_arrested_age` arrests, which can be attributed to a seventeen year old's close proximity to adulthood. On the contrary, the age group with the least number of arrests was the zero through age nine age category, with `r info$least_arrested_age` arrests. These statistics fit into society's generalizations about crimes and age, as young children are seldom seen as criminals, however, older teenagers are often called "dangerous" or "violent", thus alluding to a higher likelihood of committing a crime. 
+
+#### Ethnicity/Race
+The ethnic group that had the greatest number of arrests was caucasians, with a total of `r info$most_arrested_race` arrests throughout the 22 years, averaging `r round(info$most_arrested_race / 22, 2)` arrests annually. The ethnic group with the least amount of arrests were native peoples, with `r info$least_arrested_race` arrests total, and `r round(info$least_arrested_race / 22, 2)` average annual arrests. 
+
+## Aggregate Table
+
+The table below represents juvenile crime arrests in the US from 1994-2016 grouped by the offense category, and presents the sex/racial demographic breakdown for each category. The offense categories are sorted by the total number of cases, providing insight into which arrests are the most common amoung youth in America. Based on the data, it appears that the top 3 crimes committed by youth are larceny, simple assault and basic drug abuse violations. In addition, it becomes clear that crime arrests in America with youth are dominated by men, a conclusion which is well documented with adults as well. It should be noted that this table only represents the top 30 offense categories, with smaller categories being removed from representation in this summary table.
+
+```{r kable_example, echo=FALSE, warning=FALSE, message=FALSE}
+kable(agg_table)
+```
+
+## Charts
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+bar
+```
+This bar chart demonstrates the discrepancies in gender and age groups when it comes to juvenile crime between 1994 to 2016. The visual demonstrates that boys in any age group are more likely to be arrested compared to girls in the same age group. There's also a general increasing trend for boys to be arrested as they grow older. On the other hand, as girls reach older age groups they become less likely to be arrested.
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+pie_chart
+```
+The pie chart reveals the racial breakdown for juvenile crime from 1994 to 2016. Across the crimes documented, white minors are the most arrested group compared to other groups. Asian Pacific Islander and Native American minors smaller fractions of the total amount of juvenile arrests. While black minors are the second largest group for juvenile arrests, this is still less than half of the total arrests that are documented for white minors.
+
+Additionally, comparing the racial breakdown of arrests to the general population, black minors are more likely to be arrested compared to their white counterparts. According to the US Census, those identifying as black take up [13.4%](https://www.census.gov/quickfacts/fact/table/US/PST045219) of the population. Yet, in juvenile crime alone, they hold almost 30% of arrests. For other groups, the percetage of arrests is still less than the overall population percentage. 
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+crime_plot
+```
+
+The dumbbell plot above answers the question of which offense is most common among youth in the US from 1996 to 2016 by comparing the number of arrests for each category between 1996 and 2016. The true top offense, which was a miscellaneous category that grouped smaller categories into one, was removed to display a more accurate picture of the most common offenses. In addition, the removes observations from 1994 and 1995 due to some issues with the cateogry data during those years.   
+
+This plot reveals a key insight. As observed in the aggregate table, the most common offense by number of arrests is Larceny, followed by Simple Assault and Drug Abuse Violations. It is also noted that Larceny has near twice the arrests of the next category, heavily outweighing other categories.
+
